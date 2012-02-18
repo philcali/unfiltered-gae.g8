@@ -1,12 +1,16 @@
-scalaVersion := "2.8.1"
+import sbtappengine.Plugin.{AppengineKeys => gae}
+
+scalaVersion := "2.9.1"
 
 seq(appengineSettings: _*)
 
 libraryDependencies ++= Seq (
-  "net.liftweb" %% "lift-json" % "2.3",
-  "net.databinder" %% "unfiltered-filter" % "$unfiltered_version$",
-  "net.databinder" %% "unfiltered-jetty" % "$unfiltered_version$",
-  "net.databinder" %% "unfiltered-json" % "$unfiltered_version$",
-  "net.databinder" %% "unfiltered-spec" % "$unfiltered_version$" % "test",
-  "org.scala-tools.testing" %% "specs" %"1.6.6" % "test"
+  "net.databinder" %% "unfiltered-filter" % "0.5.3",
+  "net.databinder" %% "unfiltered-jetty" % "0.5.3",
+  "net.databinder" %% "unfiltered-json" % "0.5.3",
+  "org.mortbay.jetty" % "jetty" % "6.1.22" % "container"
 )
+
+unmanagedJars in Compile <++= gae.libPath in Compile map { libPath =>
+  (libPath / "user" * "*.jar").classpath
+}
